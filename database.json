@@ -1,0 +1,98 @@
+{
+    "NIVEA Body Milk": {
+        "ean": "4005900452108",
+        "name": "NIVEA Body Milk",
+        "packaging": {
+            "material": "HDPE",
+            "material-color": "white",
+            "food_categorie": "non-food",
+            "selling_price_per_unit": "9.46",
+            "selling_price_per_kg_in_eur": "2.2",
+        },
+        "country_of_production": "Germany"
+    },
+    "EXTRA Professional Kaugummi White": {
+        "ean": "4009900533652",
+        "name": "EXTRA Professional Kaugummi White",
+        "packaging": {
+            "material": "HDPE",
+            "material-color": "white",
+            "food_categorie": "food",
+            "selling_price_per_unit": "4.0",
+            "selling_price_per_kg_in_eur": "2.5",
+        },
+        "country_of_production": "France"
+    },
+    "Adelholzener Mineralwasser": {
+        "ean": "4005906002079",
+        "name": "Adelholzener Mineralwasser",
+        "packaging": {
+            "material": "PET",
+            "material-color": "transparent",
+            "food_categorie": "food",
+            "selling_price_per_unit": "14.06",
+            "selling_price_per_kg_in_eur": "1.9",
+        },
+        "country_of_production": "Germany"
+    },
+    "Denkmit Desinfektionsspray": {
+        "ean": "4058172931871",
+        "name": "Denkmit Desinfektionsspray",
+        "packaging": {
+            "material": "HDPE",
+            "material-color": "white",
+            "food_categorie": "non-food",
+            "selling_price_per_unit": "10.0",
+            "selling_price_per_kg_in_eur": "2.2",
+        },
+        "country_of_production": "Germany"
+    },
+    "Kühlmann Taboulé Couscoussalat": {
+        "ean": "4051009014259",
+        "name": "Kühlmann Taboulé Couscoussalat",
+        "packaging": {
+            "material": "PP",
+            "material-color": "transparent",
+            "food_categorie": "food",
+            "selling_price_per_unit": "4.08",
+            "selling_price_per_kg_in_eur": "2.04",
+        },
+        "country_of_production": "Germany"
+    },
+    "Briosa Sardine Paté": {
+        "ean": "5604912014237",
+        "name": "Briosa Sardine Paté",
+        "packaging": {
+            "material": "PT",
+            "material-color": "multicolor",
+            "food_categorie": "food",
+            "selling_price_per_unit": "0.54",
+            "selling_price_per_kg_in_eur": "1.8",
+        },
+        "country_of_production": "Portugal"
+    },
+    "American Style Cookies": {
+        "ean": "4311501795996",
+        "name": "American Style Cookies",
+        "packaging": {
+            "material": "Aluminum",
+            "material-color": "silver",
+            "food_categorie": "food",
+            "selling_price_per_unit": "3.36",
+            "selling_price_per_kg_in_eur": "2.8",
+        },
+        "country_of_production": "Germany"
+    },
+    "Volvic Naturelle": {
+        "ean": "3057640186158",
+        "name": "Volvic Naturelle",
+        "packaging": {
+            "material": "PET",
+            "material-color": "transparent",
+            "food_categorie": "food",
+            "selling_price_per_unit": "6.08",
+            "selling_price_per_kg_in_eur": "1.9",
+        },
+        "country_of_production": "France"
+    },
+}
