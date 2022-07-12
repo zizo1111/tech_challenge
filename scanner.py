@@ -1,7 +1,8 @@
 import cv2
 import argparse
-from pyzbar import pyzbar
+from pyzbar.pyzbar import decode
 from centroidtracker import CentroidTracker
+from sortTracker import *
 import numpy as np
 import dbr
 from dbr import *
@@ -27,10 +28,20 @@ class BarcodeScanner:
         self.bardet = cv2.barcode_BarcodeDetector()
         self.cntr = 0
         self.tracker = None
+        self.objects_dict = {}
+        self.database = load_json_database(self.args['database_path'])
+        self.total_collected_value = 0.0
 
         if self.src in ['vid', 'usb', 'picam']:
             self.create_pipeline()
-            self.tracker = CentroidTracker()
+            self.tracker_type = self.args['tracker']
+
+            if self.tracker_type == 'sort':
+                self.tracker = Sort(max_age=100, 
+                                    min_hits=5,
+                                    iou_threshold=0.3) #create instance of the SORT tracker
+            elif self.tracker_type == 'centroid':
+                self.tracker = CentroidTracker()
             if self.write_vid:
                 self.vid_out = None
             
@@ -78,6 +89,7 @@ class BarcodeScanner:
             self.picam.close()
         if self.write_vid and self.vid_out is not None:
             self.vid_out.release()
+        print(self.objects_dict)
         cv2.destroyAllWindows() 
 
     def decode_dbr(self, frame):
@@ -95,6 +107,16 @@ class BarcodeScanner:
         return results
 
 
+    def det_decode(self, image):
+        barcodes = decode(resize(image))
+        if len(barcodes) == 0:
+            dbr_res = self.decode_dbr(resize(image))
+            if dbr_res is not None:
+                    return int(dbr_res[0].barcode_text)
+            else:
+                return None
+        else:
+            return int(barcodes[0].data)
 
     def process_method(self, raw_frame):
         #resize image
@@ -104,13 +126,11 @@ class BarcodeScanner:
         else:
             frame = raw_frame
         
-        if self.write_vid and self.vid_out is None:
-            self.vid_out = cv2.VideoWriter('outpy.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 30, (frame.shape[1], frame.shape[0]))
         
         res_frame = frame.copy()
        
         retval, decoded_info, decoded_type, points = self.bardet.detectAndDecode(frame)
-        
+   
         rects = []
         if points is not None:
             points = points.astype(np.int)
@@ -118,50 +138,73 @@ class BarcodeScanner:
                 res_frame = cv2.drawContours(res_frame,[point],0,(0, 255, 0),2)
                 if self.tracker is not None:
 
-                    min_x = np.amin(points[:,0])
-                    max_x = np.amax(points[:,0])
-                    min_y = np.amin(points[:,1])
-                    max_y = np.amax(points[:,1])
-                    box = np.array([min_x, max_x, min_y, max_y])
+                    min_x = np.amin(point[:,0])
+                    max_x = np.amax(point[:,0])
+                    min_y = np.amin(point[:,1])
+                    max_y = np.amax(point[:,1])
+                    box = None
+                    if self.tracker_type == 'centroid':
+                        box = np.array([min_x, max_x, min_y, max_y])
+                    elif self.tracker_type == 'sort':
+                        box = np.array([min_x, min_y, max_x, max_y])
                     rects.append(box.astype("int"))
 
-                res = crop_bb1(np.float32([point]), cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY))
-
                 # find QR and barcodes within the image
-                barcodes = pyzbar.decode(resize(res, 500))
-                dbr_res = self.decode_dbr(resize(res))
-                if dbr_res is not None:
-                    for dbr_r in dbr_res:
-                        print("dbr", dbr_r.barcode_text)
                 
+                #     (x, y, w, h) = barcode.rect
+                #     #cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
+                #     barcodeData = barcode.data.decode("utf-8")
+                #     barcodeType = barcode.type
+                #     # draw the barcode data and barcode type on the image
+                #     text = "{} ({})".format(barcodeData, barcodeType)
+                #     cv2.putText(res_frame, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX,
+                #         0.5, (0, 0, 255), 2)
 
-                for barcode in barcodes:
-                    print(barcode.data, barcodes)   
-                    (x, y, w, h) = barcode.rect
-                    #cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
-                    barcodeData = barcode.data.decode("utf-8")
-                    barcodeType = barcode.type
-                    # draw the barcode data and barcode type on the image
-                    text = "{} ({})".format(barcodeData, barcodeType)
-                    cv2.putText(res_frame, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX,
-                        0.5, (0, 0, 255), 2)
+        if self.tracker is not None and len(rects) > 0:
+            self.objects = self.tracker.update(np.array(rects))
 
-        if self.tracker is not None:
-                self.objects = self.tracker.update(rects)
+            if self.tracker_type == 'centroid':
                 # loop over the tracked objects
-        for (objectID, centroid) in self.objects.items():
-            # draw both the ID of the object and the centroid of the
-            # object on the output frame
-            text = "ID {}".format(objectID)
-            cv2.putText(res_frame, text, (centroid[0] - 10, centroid[1] - 10),
-                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 3)
-            cv2.circle(res_frame, (centroid[0], centroid[1]), 4, (0, 255, 0), -1)    
-        
+                for (objectID, centroid) in self.objects.items():
+                    # draw both the ID of the object and the centroid of the
+                    # object on the output frame
+                    text = "ID {}".format(objectID)
+                    cv2.putText(res_frame, text, (centroid[0] - 10, centroid[1] - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 3)
+                    cv2.circle(res_frame, (centroid[0], centroid[1]), 4, (0, 255, 0), -1)
+            
+            elif self.tracker_type == 'sort':
+                for obj in self.objects:
+                    if not obj[4] in self.objects_dict.keys():
+                        res = crop_bb2(obj, frame)
+                        ean = self.det_decode(res)
+                        if ean is not None:
+                            self.objects_dict[int(obj[4])] = {'ean':ean, 'data':None}
+            
+                            ret, data = find_in_database(self.database, ean)
+                            if ret:
+                                self.objects_dict[int(obj[4])]['data'] = data
+                                self.total_collected_value += float(data['packaging']['selling_price_per_unit'])
+
+        else:
+            if points is not None:
+                for i, point in enumerate(points):
+                    res = crop_bb1(np.float32([point]), cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY))
+                    ean = self.det_decode(res)
+                    if ean is not None:
+                        ret, data = find_in_database(ean)
+
+        n_frame = None
         if self.show_res:
-            cv2.imshow("result", res_frame)
+            res_frame = cv2.copyMakeBorder(res_frame,0,0,900,0,cv2.BORDER_CONSTANT,value=[255, 255, 255])
+            res_frame = anotate_frame(self.objects_dict, self.total_collected_value, res_frame)
+            n_frame = resize(res_frame, 50)
+            cv2.imshow("result", n_frame)
+            if self.write_vid and self.vid_out is None: 
+                self.vid_out = cv2.VideoWriter('outpy1.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 30, (n_frame.shape[1], n_frame.shape[0]))
         
         if self.write_vid and self.vid_out is not None:
-            self.vid_out.write(frame)
+            self.vid_out.write(n_frame)
     
     def process_method2(self, raw_frame):
         gray = cv2.cvtColor(raw_frame, cv2.COLOR_BGR2GRAY)
@@ -216,7 +259,7 @@ class BarcodeScanner:
             rotImage = rotImage[boxOrigY:boxOrigY+boxHeight, boxOrigX:boxOrigX+boxWidth]
 
             if(np.array(rotImage.shape).all() > 0):
-                print(pyzbar.decode(rotImage))
+                print(decode(rotImage))
     
 
     def process_method1(self, raw_frame):
@@ -254,50 +297,36 @@ class BarcodeScanner:
             box = np.int0(cv2.boxPoints(rect))
             cv2.drawContours(raw_frame, [box], -1, (0, 255, 0), 3)
 
-    
-    def threshold_image(self, frame):
-        closed = cv2.morphologyEx(frame, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_RECT, (21, 1)))
-
-        # #------------------------
-        # # Statistics
-        # #========================
-        dens = np.sum(frame, axis=0)
-        mean = np.mean(dens)
-
-        #------------------------
-        # Thresholding
-        #========================
-        thresh = closed.copy()
-        for idx, val in enumerate(dens):
-            if val< 10800:
-                thresh[:,idx] = 0
-
-        (_, thresh2) = cv2.threshold(thresh, 128, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-        cv2.imshow("input thresh", thresh2)
-        return thresh2
 
 
+def parse_args():
+    # parse arguments
+    ap = argparse.ArgumentParser()
+    ap.add_argument('-s', '--src',
+                    default='img',
+                    const='img',
+                    nargs='?',
+                    choices=['usb', 'picam', 'vid', 'img'],
+                    help='select input source (default: %(default)s)')
+    ap.add_argument("-p", "--path", required = False, help = "video/image path")
+    ap.add_argument("--database_path", required = False, default="database.json", help = "video/image path")
+    ap.add_argument("-d", "--dstDir", required = False, default = "dstDir", help = "path to the destination")
+    ap.add_argument("--width", required = False, default = 1920, const = 1920, nargs='?',help = "camera frame width")
+    ap.add_argument("--height", required = False, default = 1080,const = 1080, nargs='?',help = "camera frame height")
+    ap.add_argument( "--show_raw", required = False, default = False, help = "show raw frame")
+    ap.add_argument( "--show_res", required = False, default = True, help = "show processed frame")
+    ap.add_argument( "--write_vid", required = False, default = False, help = "write_out video")
+    ap.add_argument('--tracker',
+                    default='sort',
+                    const='sort',
+                    nargs='?',
+                    choices=['sort', 'centroid', 'none'],
+                    help='tracker (default: %(default)s)')
 
-# parse arguments
-ap = argparse.ArgumentParser()
-ap.add_argument('-s', '--src',
-                default='img',
-                const='img',
-                nargs='?',
-                choices=['usb', 'picam', 'vid', 'img'],
-                help='select input source (default: %(default)s)')
-ap.add_argument("-p", "--path", required = False, help = "video/image path")
-ap.add_argument("-d", "--dstDir", required = False, default = "dstDir", help = "path to the destination")
-ap.add_argument("--width", required = False, default = 1920, const = 1920, nargs='?',help = "camera frame width")
-ap.add_argument("--height", required = False, default = 1080,const = 1080, nargs='?',help = "camera frame height")
-ap.add_argument( "--show_raw", required = False, default = False, help = "show raw frame")
-ap.add_argument( "--show_res", required = False, default = True, help = "show processed frame")
-ap.add_argument( "--write_vid", required = False, default = False, help = "write_out video")
-
-args = vars(ap.parse_args())
+    return vars(ap.parse_args())
 
 if __name__ == "__main__":
-    print('x', args)
+    args = parse_args()
     sc = BarcodeScanner(args)
     if sc.src == 'img':
         raw = sc.grab_frame()

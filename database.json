@@ -7,7 +7,7 @@
             "material-color": "white",
             "food_categorie": "non-food",
             "selling_price_per_unit": "9.46",
-            "selling_price_per_kg_in_eur": "2.2",
+            "selling_price_per_kg_in_eur": "2.2"
         },
         "country_of_production": "Germany"
     },
@@ -19,7 +19,7 @@
             "material-color": "white",
             "food_categorie": "food",
             "selling_price_per_unit": "4.0",
-            "selling_price_per_kg_in_eur": "2.5",
+            "selling_price_per_kg_in_eur": "2.5"
         },
         "country_of_production": "France"
     },
@@ -31,7 +31,7 @@
             "material-color": "transparent",
             "food_categorie": "food",
             "selling_price_per_unit": "14.06",
-            "selling_price_per_kg_in_eur": "1.9",
+            "selling_price_per_kg_in_eur": "1.9"
         },
         "country_of_production": "Germany"
     },
@@ -43,7 +43,7 @@
             "material-color": "white",
             "food_categorie": "non-food",
             "selling_price_per_unit": "10.0",
-            "selling_price_per_kg_in_eur": "2.2",
+            "selling_price_per_kg_in_eur": "2.2"
         },
         "country_of_production": "Germany"
     },
@@ -55,7 +55,7 @@
             "material-color": "transparent",
             "food_categorie": "food",
             "selling_price_per_unit": "4.08",
-            "selling_price_per_kg_in_eur": "2.04",
+            "selling_price_per_kg_in_eur": "2.04"
         },
         "country_of_production": "Germany"
     },
@@ -67,7 +67,7 @@
             "material-color": "multicolor",
             "food_categorie": "food",
             "selling_price_per_unit": "0.54",
-            "selling_price_per_kg_in_eur": "1.8",
+            "selling_price_per_kg_in_eur": "1.8"
         },
         "country_of_production": "Portugal"
     },
@@ -79,7 +79,7 @@
             "material-color": "silver",
             "food_categorie": "food",
             "selling_price_per_unit": "3.36",
-            "selling_price_per_kg_in_eur": "2.8",
+            "selling_price_per_kg_in_eur": "2.8"
         },
         "country_of_production": "Germany"
     },
@@ -91,8 +91,8 @@
             "material-color": "transparent",
             "food_categorie": "food",
             "selling_price_per_unit": "6.08",
-            "selling_price_per_kg_in_eur": "1.9",
+            "selling_price_per_kg_in_eur": "1.9"
         },
         "country_of_production": "France"
-    },
+    }
 }
