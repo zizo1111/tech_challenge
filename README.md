@@ -5,6 +5,10 @@ This repo contains the software components for our Barcode scanning solution imp
 ***
 As we our task was to come up with an innovative solution to tackle robotizing waste recycling. Our team developed the idea which aims to ultimately create a zero waste stream, this can be done by tracking waste from waste to source. Our prototype aims to showcase the potential of tracking recycable waste present in the collected through computer vision. For that we Built a prototype which consists of a simple conveyer belt, run by a stepper motor. This is combined with a two cameras mounted on the on top of the conveyer belt looking down. Our Software which run on a dedicated Raspberry Pi, processes the camera stream, detects and decodes the barcode present on the products, and finally visualizes the output along with information from our database. Here is a detailed explanation of the Implementation.
 
+<p align="center">
+  <img src="images/full_pic.png" width="350">
+</p>
+
 ## Hardware Components
 ***
 For Building the prototype, the following electronics were used:
@@ -23,13 +27,16 @@ For Building the prototype, the following electronics were used:
 The parts used for building the conveyer belt were drawn on [Inventor](https://www.autodesk.de/products/inventor/overview). These parts can be found under [components](components/) directory.
 The prototype can be completey built using lastercut and 3D printed parts mounted together using bolts. Some components can be bought as well from building supplies stores.
 The complete assembly can be found [here](components/conveyer_with_sides.iam).
+
 ### Laser cut parts:
 ***
 The following parts can be cut on 6mm HDF plates and mounted together:
+
 * Sides of the conveyer Belt. Design can be found [here](components/Sides.ipt).
 * The Pi holder in which the Pi and cameras are mounted to. This consists of two parts, the [sides](components/holder_sides.ipt) and the [holder](components/pi_holder.ipt).
 * The two gears transfering the movement from the stepper motor to the belt. [gear1](components/Spur%20Gear14.ipt), and [gear2](components/Spur%20Gear24.ipt).
 * In order to mount and fix the gears together, this [part](components/motor_gear_holder.ipt), which should be also laser cut.
+
 ### 3D printed parts:
 ***
 * The Pi camera mounting [holder](components/pi_camera_mount_v8.stl), the design was adopted from [here](https://www.thingiverse.com/thing:2810155).
@@ -42,6 +49,7 @@ The following parts can be cut on 6mm HDF plates and mounted together:
 ### Barcode Detection
 ***
 The Barcode detection algorithm running on a [Raspberry Pi Model 4B 2Gb+](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/) consists of the following modules:
+
 * The [Scanner](scanner.py): This is the main module executing the barcode detection and decoding algorithm. The module contains several algorithms for processing image frames. The processing is mainly carried out using [OpenCV](https://opencv.org/) python library, in addition to utilizing the [Zbar](http://zbar.sourceforge.net/) linux library and it's python wrapper [Pyzbar](https://pypi.org/project/pyzbar/) and [Dynamsoft Barcode Reader SDK](https://pypi.org/project/dbr/) for decoding the detected barcodes.
 * Several utility functions are implemented in this [file](utils.py).
 * Two mutliple object tracker (MOT) algorithms were adopted to track the detected barcodes along the conveyer belt, to prevent multiple detection and decoding of the same object more than once, as well as assigning unique IDs for each detected object. The two trackers adopted are [SORT](sortTracker.py) tracker adopted from [here](https://arxiv.org/abs/1602.00763?context=cs), as well as [Centroid](centroidtracker.py) adopted from [here](https://pyimagesearch.com/2018/07/23/simple-object-tracking-with-opencv/).
