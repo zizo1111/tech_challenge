@@ -48,6 +48,9 @@ The Barcode detection algorithm running on a [Raspberry Pi Model 4B 2Gb+](https:
 
 All other python packages needed can be found in the [requirements](requirements.txt)
 Specific function description is to found in the python files for each function, in addition to the inputs/outputs and other comments.
+<p align="center">
+  <img src="images/diagram.png" width="700" alt="Window result">
+</p>
 
 ### Run the Barcode scanner:
 ***
