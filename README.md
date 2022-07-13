@@ -29,7 +29,7 @@ The following parts can be cut on 6mm HDF plates and mounted together:
 * Sides of the conveyer Belt. Design can be found [here](components/Sides.ipt).
 * The Pi holder in which the Pi and cameras are mounted to. This consists of two parts, the [sides](components/holder_sides.ipt) and the [holder](components/pi_holder.ipt).
 * The two gears transfering the movement from the stepper motor to the belt. [gear1](components/Spur%20Gear14.ipt), and [gear2](components/Spur%20Gear24.ipt).
-
+* In order to mount and fix the gears together, this [part](components/motor_gear_holder.ipt), which should be also laser cut.
 ### 3D printed parts:
 ***
 * The Pi camera mounting [holder](components/pi_camera_mount_v8.stl), the design was adopted from [here](https://www.thingiverse.com/thing:2810155).
@@ -112,6 +112,14 @@ The output window shoulf look like this
   <img src="images/Screeshot_window1.png" width="350" alt="Window result">
 </p>
 
+On the left corner, the following information is displayed.
+* Number of objects detected
+* Current collected value in cents
+* List of Objects detected and matched with our database, with their names, EAN number, material type and value/kg.
+
+<p align="center">
+  <img src="images/Screeshot_window2.png" width="350" alt="Window result">
+</p>
 ### Running the stepper motor
 ***
 The stepper motor used for moving the conveyer belt is controlled using the [Adafruit DC & Stepper Motor HAT for Raspberry Pi - Mini Kit](https://www.adafruit.com/product/2348) mounted on the other Pi.
@@ -148,13 +156,21 @@ First increase the friction on the outside of the rolls (also the motor roll), b
 
 After everything is dryed, you need to insert the bearings into the roll (it should smuggle in nicely with small pressure, if it’s too loose, add some glue). Then the order is: bearing -> washer -> steel bar -> washer -> nut on both sides. Prepare each position and tighten the screws a little bit. Only if you have all rolls inserted, tight the screws hard.
 
+<p align="center">
+  <img src="images/proto2.jpeg" width="350">
+</p>
+
 ### Step 3: Belt
 
 Now the basic frame is set, span a suitable banner over the whole conveyer. It should be a little longer then needed. Make sure that you build up a tension and stick the beginning and the end with instant adhesive. Cut the too long remains.
 
+<p align="center">
+  <img src="images/proto3.jpeg" width="350">
+</p>
+
 ### Step 4: The motor roll
 
-For the motor roll, you need one metal rod (4mm), which should be longer then the wide of the prototype. Push it through the rubber plug, the roll and the other rubber plugs. Fasten the two rubber plugs at the ends of the roll with hot glue. Then place the metal rod into two holes in the bar. 
+For the motor roll, you need one metal rod (4mm), which should be longer then the width of the prototype. Push it through the rubber plug, the roll and the other rubber plugs. Fasten the two rubber plugs at the ends of the roll with hot glue. Then place the metal rod into two holes in the bar. 
 
 ### Step 5: The motor
 
@@ -162,13 +178,18 @@ Here we will discuss the mechanics of the motor construction. Follow our github 
 To power the conveyer belt, we use a stepper motor and a speed controller implemented in a raspberry pi. You need to cut the two gears from a stable flat material (we used wood). Fix the smaller gear to the motor and the bigger one to the motor roll. Then place them, so they rotate with each other (see photo).
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/109156845/178797943-429206a1-c62f-47c5-8e74-99c3ee84a43a.jpeg" width="700" alt="Window result">
+  <img src="https://user-images.githubusercontent.com/109156845/178797943-429206a1-c62f-47c5-8e74-99c3ee84a43a.jpeg" width="350">
 </p>
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/109156845/178798263-b96ab89a-aa41-4e9b-96e2-a092ae4bf618.jpeg" width="700" alt="Window result">
+  <img src="https://user-images.githubusercontent.com/109156845/178798263-b96ab89a-aa41-4e9b-96e2-a092ae4bf618.jpeg" width="350">
 </p>
 
 
 
 
 Connect the motor to the power source and get it run with the raspberry pi. Now you’re finished and everything should work!
+
+The whole construction og the connyever belt looks like this:
+<p align="center">
+  <img src="images/proto4.jpeg" width="350">
+</p>
