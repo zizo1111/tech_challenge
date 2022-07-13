@@ -132,3 +132,33 @@ Finally run the motor by:
 ```console
 pi@motorpi:~$ python motor.py
 ```
+
+## 2. Step by Step Tutorial
+
+Preparation
+For preparation print two rubber plugs in the 3d printer (you can find them in our repo), as it takes some hours. For the other material you can just follow the buy list and get most of the stuff in a regular hardware store.
+
+Step 1: Decide for the conveyor dimension and cut the pieces
+First of all, the dimensions of the conveyer belt itself needs to be decided. We choose, to cut a 2.00m steel bar in two pieces (=1m length) and cut the rolls in 30cm pieces. With rolls every 16.67cm, we needed 6 rolls. The next step would be cutting everything as needed.
+Step 2: Prepare the rolls and insert them
+
+For this step you need per cutted roll (not for the motor roll, that means 5/6): a lot of sandpaper, 2 bearings, 2 screws and 2 nuts (M8), 4 flat washers (Unterlegscheiben, inner diameter 8mm) and the roll. That meant we need 10 pieces from everything and the double amount of washers.
+
+First increase the friction on the outside of the rolls (also the motor roll), by sticking on the sandpaper on each of them. You can cut the sandpaper in multiple strips (length= scope of the roll) and stick 3-4 of them on each roll with hot glue.
+
+After everything is dryed, you need to insert the bearings into the roll (it should smuggle in nicely with small pressure, if it’s too loose, add some glue). Then the order is: bearing -> washer -> steel bar -> washer -> nut on both sides. Prepare each position and tighten the screws a little bit. Only if you have all rolls inserted, tight the screws hard.
+
+Step 3: Belt
+
+Now the basic frame is set, span a suitable banner over the whole conveyer. It should be a little longer then needed. Make sure that you build up a tension and stick the beginning and the end with instant adhesive. Cut the too long remains.
+
+Step 4: The motor roll
+
+For the motor roll, you need one metal rod (4mm), which should be longer then the wide of the prototype. Push it through the rubber plug, the roll and the other rubber plugs. Fasten the two rubber plugs at the ends of the roll with hot glue. Then place the metal rod into two holes in the bar. 
+
+Step 5: The motor
+
+Here we will discuss the mechanics of the motor construction. Follow our github page for programming instructions. 
+To power the conveyer belt, we use a stepper motor and a speed controller implemented in a raspberry pi. You need to cut the two gears from a stable flat material (we used wood). Fix the smaller gear to the motor and the bigger one to the motor roll. Then place them, so they rotate with each other (see photo).
+
+Connect the motor to the power source and get it run with the raspberry pi. Now you’re finished and everything should work!
