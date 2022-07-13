@@ -133,7 +133,7 @@ Finally run the motor by:
 pi@motorpi:~$ python motor.py
 ```
 
-## 2. Step by Step Tutorial
+### 2. Step by Step Tutorial
 
 # Preparation
 For preparation print two rubber plugs in the 3d printer (you can find them in our repo), as it takes some hours. For the other material you can just follow the buy list and get most of the stuff in a regular hardware store.
