@@ -162,11 +162,12 @@ Here we will discuss the mechanics of the motor construction. Follow our github 
 To power the conveyer belt, we use a stepper motor and a speed controller implemented in a raspberry pi. You need to cut the two gears from a stable flat material (we used wood). Fix the smaller gear to the motor and the bigger one to the motor roll. Then place them, so they rotate with each other (see photo).
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/109156845/178797943-429206a1-c62f-47c5-8e74-99c3ee84a43a.jpeg)" width="700" alt="Window result">
+  <img src="https://user-images.githubusercontent.com/109156845/178797943-429206a1-c62f-47c5-8e74-99c3ee84a43a.jpeg" width="700" alt="Window result">
 </p>
 <p align="center">
   <img src="https://user-images.githubusercontent.com/109156845/178798263-b96ab89a-aa41-4e9b-96e2-a092ae4bf618.jpeg" width="700" alt="Window result">
 </p>
+
 
 
 
